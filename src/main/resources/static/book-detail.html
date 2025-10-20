@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>책 상세 조회</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    .book-info {
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 20px 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .book-info p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 10px 0;
+    }
+
+    .book-info strong {
+      display: inline-block;
+      width: 100px;
+      color: #34495e;
+    }
+
+    #actions {
+      text-align: center;
+    }
+
+    button {
+      background-color: #3498db;
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      margin: 0 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #delete-button {
+      background-color: #e74c3c;
+    }
+
+    #delete-button:hover {
+      background-color: #c0392b;
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 480px) {
+      body {
+        margin: 20px 10px;
+        padding: 15px;
+      }
+
+      .book-info p {
+        font-size: 16px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        margin: 5px 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <h1>책 상세 조회</h1>
+    <div class="book-info" id="book-detail">로딩 중...</div>
+    <div id="actions">
+        <button id="back-button">목록으로 돌아가기</button>
+        <button id="edit-button">수정</button>
+        <button id="delete-button">삭제</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bookId = params.get('id');
+
+        const detailDiv = document.getElementById('book-detail');
+        const editBtn = document.getElementById('edit-button');
+        const deleteBtn = document.getElementById('delete-button');
+
+        if (!bookId) {
+        detailDiv.textContent = '책 ID가 없습니다.';
+        editBtn.style.display = 'none';
+        deleteBtn.style.display = 'none';
+        } else {
+        fetch(`/api/v1/books/${encodeURIComponent(bookId)}`)
+            .then(res => {
+            if (!res.ok) throw new Error('책을 찾을 수 없습니다.');
+            return res.json();
+            })
+            .then(book => {
+            detailDiv.innerHTML = `
+                <p><strong>ID:</strong> ${book.id}</p>
+                <p><strong>이름:</strong> ${book.name}</p>
+                <p><strong>저자:</strong> ${book.author}</p>
+                <p><strong>출판사:</strong> ${book.publisher}</p>
+                <p><strong>발행일:</strong> ${book.publishedDate}</p>
+            `;
+            })
+            .catch(err => {
+            detailDiv.textContent = '책 상세 정보를 불러올 수 없습니다. ' + err.message;
+            editBtn.style.display = 'none';
+            deleteBtn.style.display = 'none';
+            });
+        }
+
+        editBtn.addEventListener('click', () => {
+        if (bookId) {
+            window.location.href = `/book-edit.html?id=${encodeURIComponent(bookId)}`;
+        }
+        });
+
+        deleteBtn.addEventListener('click', () => {
+        if (!bookId) return;
+
+        if (!confirm('정말로 이 책을 삭제하시겠습니까?')) return;
+
+        fetch(`/api/v1/books/${encodeURIComponent(bookId)}`, {
+            method: 'DELETE',
+        })
+            .then(res => {
+            if (!res.ok) throw new Error('삭제 실패: ' + res.statusText);
+            alert('삭제되었습니다.');
+            window.location.href = '/index.html';
+            })
+            .catch(err => {
+            alert('삭제 중 오류가 발생했습니다: ' + err.message);
+            });
+        });
+    </script>
+</body>
+</html>

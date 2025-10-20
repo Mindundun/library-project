@@ -17,7 +17,8 @@ public interface BookService {
     // 책 전체 조회
     public List<Book> getAllBooks();
 
-    
+    // 책 상세 조회
+    public BookDto getBookById(Long id);
     
 
     // Default Method

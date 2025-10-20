@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>책 등록</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus {
+      border-color: #3498db;
+    }
+
+    /* 여기에 추가된 부분 */
+    input[type="date"] {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 12px;
+      font-size: 18px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* 취소 버튼 */
+    #cancel-button {
+      background-color: #95a5a6;
+      margin-top: 10px;
+    }
+
+    #cancel-button:hover {
+      background-color: #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+  <h1>책 등록</h1>
+  <form id="book-form">
+    <label for="name">이름</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="author">저자</label>
+    <input type="text" id="author" name="author" required />
+
+    <label for="publisher">출판사</label>
+    <input type="text" id="publisher" name="publisher" required />
+
+    <label for="publishedDate">발행일</label>
+    <input type="date" id="publishedDate" name="publishedDate" required />
+
+    <button type="submit">등록하기</button>
+    <button type="button" id="cancel-button">취소</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('book-form');
+    const cancelBtn = document.getElementById('cancel-button');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: form.name.value.trim(),
+        author: form.author.value.trim(),
+        publisher: form.publisher.value.trim(),
+        publishedDate: form.publishedDate.value
+      };
+
+      fetch('/api/v1/books', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('등록 실패: ' + res.statusText);
+          alert('책이 성공적으로 등록되었습니다!');
+          window.location.href = '/index.html'; // 등록 후 목록 페이지로 이동
+        })
+        .catch(err => {
+          alert('등록 중 오류가 발생했습니다: ' + err.message);
+        });
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      window.location.href = '/index.html';
+    });
+  </script>
+</body>
+</html>

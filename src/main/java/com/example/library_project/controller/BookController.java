@@ -30,6 +30,13 @@ public class BookController {
 
     private final BookService bookService;
 
+    @GetMapping("/")
+    public String redirectToIndex(@RequestParam(required = false) String param) {
+        // param은 필요한 경우 사용, 안쓰면 required=false 처리
+        return "redirect:/";  // 루트 경로로 리다이렉트
+    }
+
+
     // 책 등록
     @PostMapping("/books")
     public ResponseEntity<Map<String, Long>> postBook(@RequestBody BookDto bookDto){
@@ -51,9 +58,9 @@ public class BookController {
 
     // 책 상세 조회
     @GetMapping("/books/{id}")
-    public String getBookById(@PathVariable(name = "id") Long id) {
-
-        return new String();
+    public ResponseEntity<BookDto> getBookById(@PathVariable(value = "id") Long id) {
+        BookDto bookDto =  bookService.getBookById(id);
+        return ResponseEntity.ok().body(bookDto);
     }
     
     

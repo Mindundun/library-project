@@ -1,0 +1,48 @@
+package com.example.library_project.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.library_project.dto.BookDto;
+import com.example.library_project.entity.Book;
+import com.example.library_project.repository.BookRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+public interface BookService {
+
+    // 책 등록
+    public Long postBook(BookDto bookDto);
+    
+
+    // Default Method
+    // Entity to Dto
+    default BookDto entityToDto(Book book) {
+
+        return BookDto.builder()
+                        .id(book.getId())
+                        .name(book.getName())
+                        .author(book.getAuthor())
+                        .description(book.getDescription())
+                        .publisher(book.getPublisher())
+                        .publishedDate(book.getPublishedDate())
+                        .regDate(book.getRegDate())
+                        .build();
+    }
+
+    // Dto to Entity
+    default Book dtoToEntity(BookDto bookDto) {
+
+        return Book.builder()
+                    .id(bookDto.getId())
+                    .name(bookDto.getName())
+                    .author(bookDto.getAuthor())
+                    .description(bookDto.getDescription())
+                    .publisher(bookDto.getPublisher())
+                    .publishedDate(bookDto.getPublishedDate())
+                    .regDate(bookDto.getRegDate())
+                    .build();
+    }
+}

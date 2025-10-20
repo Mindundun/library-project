@@ -1,20 +1,23 @@
 package com.example.library_project.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.library_project.dto.BookDto;
 import com.example.library_project.entity.Book;
-import com.example.library_project.repository.BookRepository;
 
-import lombok.RequiredArgsConstructor;
 
 @Service
 public interface BookService {
 
     // 책 등록
-    public Long postBook(BookDto bookDto);
+    public Long createBook(BookDto bookDto);
+
+    // 책 전체 조회
+    public List<Book> getAllBooks();
+
+    
     
 
     // Default Method

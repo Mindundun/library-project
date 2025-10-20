@@ -1,8 +1,12 @@
 package com.example.library_project.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.library_project.dto.BookDto;
+import com.example.library_project.entity.Book;
 import com.example.library_project.repository.BookRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,10 +20,17 @@ public class BookServiceImpl implements BookService{
 
     // 책 등록하기
     @Transactional(readOnly = false)
-    public Long postBook(BookDto bookDto) {
+    public Long createBook(BookDto bookDto) {
         // Dto를 Entity로 변경
-        bookRepository.save(b)
-        return 1L;
+        Book book = dtoToEntity(bookDto);
+        bookRepository.save(book);
+        return book.getId();
     }
+
+    // 책 전체 조회
+    public List<Book> getAllBooks(){
+        return bookRepository.findAll();
+    }
+    
 
 }

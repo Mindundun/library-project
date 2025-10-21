@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @Slf4j
 @RequestMapping("/api/v1")
@@ -61,6 +63,14 @@ public class BookController {
     public ResponseEntity<BookDto> getBookById(@PathVariable(value = "id") Long id) {
         BookDto bookDto =  bookService.getBookById(id);
         return ResponseEntity.ok().body(bookDto);
+    }
+
+    // 책 수정
+    @PutMapping("/books/{id}")
+    public ResponseEntity<String> putBook(@PathVariable(value = "id") Long id, @RequestBody BookDto bookDto) {
+        bookDto.setId(id);
+        bookService.putBook(bookDto);        
+        return ResponseEntity.noContent().build();
     }
     
     

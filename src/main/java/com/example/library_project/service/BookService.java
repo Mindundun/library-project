@@ -19,6 +19,11 @@ public interface BookService {
 
     // 책 상세 조회
     public BookDto getBookById(Long id);
+
+    // 책 수정
+    public void putBook(BookDto bookDto);
+
+
     
 
     // Default Method

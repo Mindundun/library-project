@@ -42,7 +42,22 @@ public class BookServiceImpl implements BookService{
         return entityToDto(book);
     }
 
-    
-    
+    // 책 수정
+    @Override
+    @Transactional(readOnly = false)
+    public void putBook(BookDto bookDto) {
+        Long id = bookDto.getId();
 
+        Book book = bookRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당하는 "+id+"의 책이 없습니다."));
+
+        book.setName(bookDto.getName());
+        book.setAuthor(bookDto.getAuthor());
+        book.setDescription(bookDto.getDescription());
+        book.setPublisher(bookDto.getPublisher());
+        book.setPublishedDate(bookDto.getPublishedDate());
+
+    }
+
+    
 }

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>책 수정</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 20px 30px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    #actions {
+      text-align: center;
+    }
+
+    button {
+      background-color: #3498db;
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      margin: 0 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #cancel-button {
+      background-color: #e74c3c;
+    }
+
+    #cancel-button:hover {
+      background-color: #c0392b;
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 480px) {
+      body {
+        margin: 20px 10px;
+        padding: 15px;
+      }
+
+      input[type="text"],
+      input[type="date"] {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        margin: 5px 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>책 수정</h1>
+  <form id="edit-form">
+    <label for="name">이름</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="author">저자</label>
+    <input type="text" id="author" name="author" required />
+
+    <label for="publisher">출판사</label>
+    <input type="text" id="publisher" name="publisher" required />
+
+    <label for="publishedDate">발행일</label>
+    <input type="date" id="publishedDate" name="publishedDate" required />
+
+    <div id="actions">
+      <button type="submit">저장</button>
+      <button type="button" id="cancel-button">취소</button>
+    </div>
+  </form>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get('id');
+
+    const form = document.getElementById('edit-form');
+    const nameInput = document.getElementById('name');
+    const authorInput = document.getElementById('author');
+    const publisherInput = document.getElementById('publisher');
+    const publishedDateInput = document.getElementById('publishedDate');
+    const cancelBtn = document.getElementById('cancel-button');
+
+    if (!bookId) {
+      alert('책 ID가 없습니다.');
+      window.location.href = '/index.html';
+    } else {
+      // 책 정보 불러오기
+      fetch(`/api/v1/books/${encodeURIComponent(bookId)}`)
+        .then(res => {
+          if (!res.ok) throw new Error('책을 찾을 수 없습니다.');
+          return res.json();
+        })
+        .then(book => {
+          // input 값 채우기
+          nameInput.value = book.name || '';
+          authorInput.value = book.author || '';
+          publisherInput.value = book.publisher || '';
+          // 발행일 포맷 맞추기 (yyyy-MM-dd)
+          if(book.publishedDate){
+            const date = new Date(book.publishedDate);
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            publishedDateInput.value = `${yyyy}-${mm}-${dd}`;
+          }
+        })
+        .catch(err => {
+          alert('책 상세 정보를 불러올 수 없습니다. ' + err.message);
+          window.location.href = '/index.html';
+        });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const updatedBook = {
+        name: nameInput.value.trim(),
+        author: authorInput.value.trim(),
+        publisher: publisherInput.value.trim(),
+        publishedDate: publishedDateInput.value
+      };
+
+      fetch(`/api/v1/books/${encodeURIComponent(bookId)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedBook)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('수정 실패: ' + res.statusText);
+        alert('책 정보가 수정되었습니다.');
+        window.location.href = `/book-detail.html?id=${encodeURIComponent(bookId)}`;
+      })
+      .catch(err => {
+        alert('수정 중 오류가 발생했습니다: ' + err.message);
+      });
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      // 상세조회 페이지로 돌아가기
+      window.location.href = `/book-detail.html?id=${encodeURIComponent(bookId)}`;
+    });
+  </script>
+</body>
+</html>

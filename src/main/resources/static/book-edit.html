@@ -106,6 +106,9 @@
     <label for="author">저자</label>
     <input type="text" id="author" name="author" required />
 
+    <label for="description">설명</label>
+    <input type="text" id="description" name="description" required />
+
     <label for="publisher">출판사</label>
     <input type="text" id="publisher" name="publisher" required />
 
@@ -143,6 +146,7 @@
           // input 값 채우기
           nameInput.value = book.name || '';
           authorInput.value = book.author || '';
+          descriptionInput.value = book.description || '';
           publisherInput.value = book.publisher || '';
           // 발행일 포맷 맞추기 (yyyy-MM-dd)
           if(book.publishedDate){

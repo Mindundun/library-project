@@ -56,8 +56,16 @@ public class BookServiceImpl implements BookService{
         book.setDescription(bookDto.getDescription());
         book.setPublisher(bookDto.getPublisher());
         book.setPublishedDate(bookDto.getPublishedDate());
-
     }
+
+    // 책 삭제
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);        
+    }
+
+    
 
     
 }

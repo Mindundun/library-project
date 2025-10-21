@@ -18,6 +18,7 @@ import com.example.library_project.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +74,11 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
     
-    
+    // 책 삭제
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<String> deleteBook(@PathVariable(value = "id") Long id) {
+        bookService.deleteBook(id);        
+        return ResponseEntity.noContent().build();
+    }
     
 }

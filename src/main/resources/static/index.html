@@ -53,6 +53,7 @@
         <th>ID</th>
         <th style="width: 40%;">이름</th>
         <th>저자</th>
+        <th>설명</th>
         <th>출판사</th>
         <th>발행일</th>
       </tr>
@@ -101,6 +102,10 @@
             const tdAuthor = document.createElement('td');
             tdAuthor.textContent = book.author;
             tr.appendChild(tdAuthor);
+
+            const tdDescription = document.createElement('td');
+            tdDescription.textContent = book.description;
+            tr.appendChild(tdDescription);
 
             const tdPublisher = document.createElement('td');
             tdPublisher.textContent = book.publisher;

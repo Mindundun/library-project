@@ -33,12 +33,21 @@
       font-size: 18px;
       line-height: 1.6;
       margin: 10px 0;
+      display: flex;
+      align-items: flex-start;
     }
 
     .book-info strong {
       display: inline-block;
       width: 100px;
       color: #34495e;
+      flex-shrink: 0;
+    }
+
+    .book-info span {
+      flex: 1;
+      word-break: break-word;
+      white-space: pre-wrap;
     }
 
     #actions {
@@ -109,11 +118,12 @@
 
     function renderBookDetail(book) {
       detailDiv.innerHTML = `
-        <p><strong>ID:</strong> ${book.id}</p>
-        <p><strong>이름:</strong> ${book.name}</p>
-        <p><strong>저자:</strong> ${book.author}</p>
-        <p><strong>출판사:</strong> ${book.publisher}</p>
-        <p><strong>발행일:</strong> ${book.publishedDate}</p>
+        <p><strong>ID:</strong> <span>${book.id}</span></p>
+        <p><strong>이름:</strong> <span>${book.name}</span></p>
+        <p><strong>저자:</strong> <span>${book.author}</span></p>
+        <p><strong>설명:</strong> <span>${book.description || ''}</span></p>
+        <p><strong>출판사:</strong> <span>${book.publisher}</span></p>
+        <p><strong>발행일:</strong> <span>${book.publishedDate}</span></p>
       `;
     }
 

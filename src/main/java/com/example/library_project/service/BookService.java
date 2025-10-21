@@ -23,6 +23,8 @@ public interface BookService {
     // 책 수정
     public void putBook(BookDto bookDto);
 
+    // 책 삭제
+    public void deleteBook(Long id);
 
     
 

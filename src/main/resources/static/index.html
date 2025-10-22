@@ -50,10 +50,10 @@
   <table id="book-table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th style="width: 40%;">이름</th>
+        <th>번호</th>
+        <th style="width: 30%;">이름</th>
         <th>저자</th>
-        <th>설명</th>
+        <th style="width: 40%;">설명</th>
         <th>출판사</th>
         <th>발행일</th>
       </tr>
@@ -84,15 +84,14 @@
           tr.appendChild(td);
           tbody.appendChild(tr);
         } else {
-          books.forEach(book => {
+          books.forEach((book, index) => {
             const tr = document.createElement('tr');
 
-            const tdId = document.createElement('td');
-            tdId.textContent = book.id;
-            tr.appendChild(tdId);
+            const tdIndex = document.createElement('td');
+            tdIndex.textContent = index + 1; // 인덱스는 0부터 시작하므로 +1
+            tr.appendChild(tdIndex);
 
             const tdName = document.createElement('td');
-            // 책 이름에 링크 추가
             const link = document.createElement('a');
             link.href = `/book-detail.html?id=${encodeURIComponent(book.id)}`;
             link.textContent = book.name;

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.library_project.dto.BookDto;
+import com.example.library_project.dto.PageRequestDto;
+import com.example.library_project.dto.PageResponseDto;
 import com.example.library_project.entity.Book;
 import com.example.library_project.service.BookService;
 
@@ -52,11 +55,19 @@ public class BookController {
     }
 
     // 책 전체 조회
-    @GetMapping("/books")
-    public ResponseEntity<List<Book>> getAllBooks() {
-        List<Book> books = bookService.getAllBooks();
+    // @GetMapping("/books")
+    // public ResponseEntity<List<Book>> getAllBooks() {
+    //     List<Book> books = bookService.getAllBooks();
 
-        return ResponseEntity.ok().body(books);
+    //     return ResponseEntity.ok().body(books);
+    // }
+
+    // 책 전체 조회 (페이징 처리)
+    @GetMapping("/books")
+    public ResponseEntity<PageResponseDto<BookDto>> getAllBooks(PageRequestDto pageRequestDto) {
+        PageResponseDto<Book> pageResponseDto = bookService.getAllBooks(pageRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
     }
 
     // 책 상세 조회

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.library_project.dto.BookDto;
+import com.example.library_project.dto.PageRequestDto;
+import com.example.library_project.dto.PageResponseDto;
 import com.example.library_project.entity.Book;
 
 
@@ -16,6 +18,9 @@ public interface BookService {
 
     // 책 전체 조회
     public List<Book> getAllBooks();
+
+    // 페이징 처리
+    PageResponseDto<BookDto> paging(PageRequestDto pageRequestDto);
 
     // 책 상세 조회
     public BookDto getBookById(Long id);

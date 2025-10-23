@@ -64,12 +64,12 @@ public class BookController {
 
     // 책 전체 조회 (페이징 처리)
     @GetMapping("/books")
-    public ResponseEntity<PageResponseDto<BookDto>> getAllBooks(PageRequestDto pageRequestDto) {
-        PageResponseDto<Book> pageResponseDto = bookService.getAllBooks(pageRequestDto);
+    public ResponseEntity<PageResponseDto<BookDto>> paging(PageRequestDto pageRequestDto) {
+        PageResponseDto<BookDto> pageResponseDto = bookService.paging(pageRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(pageResponseDto);
     }
-
+    
     // 책 상세 조회
     @GetMapping("/books/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable(value = "id") Long id) {

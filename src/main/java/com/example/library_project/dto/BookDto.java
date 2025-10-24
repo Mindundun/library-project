@@ -3,18 +3,16 @@ package com.example.library_project.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.library_project.entity.BookDetailReview;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
 public class BookDto {
    
@@ -26,4 +24,6 @@ public class BookDto {
     private LocalDate publishedDate;
     private LocalDateTime regDate;
 
+    private BookDetailReviewDto review;
+    
 }

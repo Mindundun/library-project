@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.library_project.dto.BookDetailReviewDto;
 import com.example.library_project.dto.BookDto;
 import com.example.library_project.dto.PageRequestDto;
 import com.example.library_project.dto.PageResponseDto;
@@ -17,13 +18,16 @@ import com.example.library_project.entity.Book;
 import com.example.library_project.repository.BookRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BookServiceImpl implements BookService{
 
     private final BookRepository bookRepository;
+    private final BookDetailReviewService bookDetailReviewService;
 
     // 책 등록하기
     @Override
@@ -67,9 +71,33 @@ public class BookServiceImpl implements BookService{
     // 책 상세 조회
     @Override
     public BookDto getBookById(Long id) {
-        Book book = bookRepository.findById(id)
+        Book book = bookRepository.findByBookId(id)
                         .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다. ID : " + id));
-        return entityToDto(book);
+        
+        BookDto bookDto = entityToDto(book);
+
+        log.info("-----book():{}", book);
+
+        log.info("-----book.getReview():{}", book.getReview());
+        // 책 독후감이 있는 경우 
+        // if (book.getReview() != null ){
+        //     bookDto.setReview(bookDetailReviewService.entityToDto(book.getReview()));
+        // }
+        // return bookDto;
+
+        // 책 독후감이 있는 경우 
+        if (book.getReview() != null ){
+            BookDetailReviewDto reviewDto = BookDetailReviewDto.builder()
+                                                                .id(book.getReview().getId())
+                                                                .content(book.getReview().getContent())
+                                                                .regDate(book.getReview().getRegDate())
+                                                                .build();
+        
+            bookDto.setReview(reviewDto);
+
+        }
+
+        return bookDto;
     }
 
     

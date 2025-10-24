@@ -12,7 +12,7 @@ public interface BookDetailReviewService {
     public Long createBookDetailReview(BookDetailReviewDto bookDetailReviewDto);
 
     // 책 리뷰 상세 조회
-    // public BookDetailReviewDto getBookDetailReview(Long id);
+    public BookDetailReviewDto getBookDetailReview(Long id);
 
     // Entity to DTO
     default BookDetailReviewDto entityToDto(BookDetailReview bookDetailReview) {

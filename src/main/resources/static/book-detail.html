@@ -1,182 +1,276 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>책 상세 조회</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-      color: #333;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
-    }
+<meta charset="UTF-8" />
+<title>책 상세 조회</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 40px;
+  }
 
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 30px;
-    }
+  h1 { color: #2c3e50; margin: 0; }
 
-    .book-info {
-      background-color: #fff;
-      border-radius: 6px;
-      padding: 20px 30px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
+  .container-wrapper {
+    display: flex;
+    justify-content: center;
+  }
 
-    .book-info p {
-      font-size: 18px;
-      line-height: 1.6;
-      margin: 10px 0;
-      display: flex;
-      align-items: flex-start;
-    }
+  .container {
+    display: flex;
+    gap: 0.5cm;
+    width: auto;
+  }
 
-    .book-info strong {
-      display: inline-block;
-      width: 100px;
-      color: #34495e;
-      flex-shrink: 0;
-    }
+  /* 책 영역 */
+  .book-section {
+    width: 600px;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 20px 30px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    transition: opacity 0.5s ease;
+    position: relative;
+  }
 
-    .book-info span {
-      flex: 1;
-      word-break: break-word;
-      white-space: pre-wrap;
-    }
+  .book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
 
-    #actions {
-      text-align: center;
-    }
+  .book-section p,
+  .review-section p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 10px 0;
+    display: flex;
+    align-items: flex-start;
+  }
 
-    button {
-      background-color: #3498db;
-      border: none;
-      color: white;
-      padding: 12px 28px;
-      margin: 0 10px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    }
+  .book-section strong,
+  .review-section strong { 
+    display: inline-block; 
+    width: 100px; 
+    color: #34495e; 
+    flex-shrink: 0; 
+  }
 
-    button:hover {
-      background-color: #2980b9;
-    }
+  .book-section span,
+  .review-section span { 
+    flex: 1; 
+    word-break: break-word; 
+    white-space: pre-wrap; 
+  }
 
-    #delete-button {
-      background-color: #e74c3c;
-    }
+  /* 독후감 영역 */
+  .review-section {
+    width: 350px;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 20px 30px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
 
-    #delete-button:hover {
-      background-color: #c0392b;
-    }
+  .review-section.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-    /* 모바일 대응 */
-    @media (max-width: 480px) {
-      body {
-        margin: 20px 10px;
-        padding: 15px;
-      }
+  .review-section h2 { 
+    margin-bottom: 15px; 
+    color: #2c3e50; 
+    font-size: 20px; 
+  }
 
-      .book-info p {
-        font-size: 16px;
-      }
+  #review-actions {
+    margin-top: 15px;
+    text-align: right;
+  }
 
-      button {
-        padding: 10px 20px;
-        font-size: 14px;
-        margin: 5px 5px;
-      }
-    }
-  </style>
+  #actions {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    margin: 0 10px 10px 0;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  }
+
+  button:hover { background-color: #2980b9; }
+  #delete-button { background-color: #e74c3c; }
+  #delete-button:hover { background-color: #c0392b; }
+  #toggle-review { background-color: #2ecc71; }
+  #toggle-review:hover { background-color: #27ae60; }
+  .review-edit { background-color: #f39c12; }
+  .review-edit:hover { background-color: #e67e22; }
+  .review-delete { background-color: #e74c3c; }
+  .review-delete:hover { background-color: #c0392b; }
+
+  @media (max-width: 1000px) {
+    .container { flex-direction: column; gap: 0; }
+    .book-section, .review-section { width: 100%; }
+    .review-section { opacity: 1; pointer-events: auto; margin-top: 20px; }
+  }
+</style>
 </head>
 <body>
-  <h1>책 상세 조회</h1>
-  <div class="book-info" id="book-detail">로딩 중...</div>
-  <div id="actions">
-    <button id="back-button" type="button">목록으로 돌아가기</button>
-    <button id="edit-button" type="button">수정</button>
-    <button id="delete-button" type="button">삭제</button>
+
+<div class="container-wrapper">
+  <div class="container" id="main-container">
+    <div class="book-section" id="book-section">
+      <div class="book-header">
+        <h1>책 상세 조회</h1>
+        <button id="toggle-review">독후감 보기</button>
+      </div>
+      <div id="book-detail">로딩 중...</div>
+    </div>
+    <div class="review-section" id="review-detail">
+      <!-- 독후감 내용 -->
+      <div id="review-content">독후감이 없습니다.</div>
+      <div id="review-actions"></div>
+    </div>
   </div>
+</div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const bookId = params.get('id');
+<div id="actions">
+  <button id="back-button" type="button">목록으로 돌아가기</button>
+  <button id="edit-button" type="button">수정</button>
+  <button id="delete-button" type="button">삭제</button>
+</div>
 
-    const detailDiv = document.getElementById('book-detail');
-    const backBtn = document.getElementById('back-button');
-    const editBtn = document.getElementById('edit-button');
-    const deleteBtn = document.getElementById('delete-button');
+<script>
+const params = new URLSearchParams(window.location.search);
+const bookId = params.get('id');
 
-    function renderBookDetail(book) {
-      detailDiv.innerHTML = `
-        <p><strong>ID:</strong> <span>${book.id}</span></p>
-        <p><strong>이름:</strong> <span>${book.name}</span></p>
-        <p><strong>저자:</strong> <span>${book.author}</span></p>
-        <p><strong>설명:</strong> <span>${book.description || ''}</span></p>
-        <p><strong>출판사:</strong> <span>${book.publisher}</span></p>
-        <p><strong>발행일:</strong> <span>${book.publishedDate}</span></p>
+const detailDiv = document.getElementById('book-detail');
+const reviewDiv = document.getElementById('review-detail');
+const reviewContent = document.getElementById('review-content');
+const reviewActions = document.getElementById('review-actions');
+const toggleBtn = document.getElementById('toggle-review');
+const backBtn = document.getElementById('back-button');
+const editBtn = document.getElementById('edit-button');
+const deleteBtn = document.getElementById('delete-button');
+
+let currentBook = null;
+
+function renderBookDetail(book) {
+  currentBook = book;
+  detailDiv.innerHTML = `
+    <p><strong>ID:</strong> <span>${book.id}</span></p>
+    <p><strong>이름:</strong> <span>${book.name}</span></p>
+    <p><strong>저자:</strong> <span>${book.author}</span></p>
+    <p><strong>설명:</strong> <span>${book.description || ''}</span></p>
+    <p><strong>출판사:</strong> <span>${book.publisher}</span></p>
+    <p><strong>발행일:</strong> <span>${formatDate(book.publishedDate)}</span></p>
+  `;
+
+  // 독후감 초기 상태
+  if (book.review) {
+    reviewContent.innerHTML = `
+      <h2>독후감</h2>
+      <p><strong>ID:</strong> <span>${book.review.id}</span></p>
+      <p><strong>내용:</strong> <span>${book.review.content}</span></p>
+      <p><strong>등록일:</strong> <span>${formatDate(book.review.regDate)}</span></p>
+    `;
+  } else {
+    reviewContent.innerHTML = '독후감이 없습니다.';
+  }
+  reviewActions.innerHTML = '';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+// 토글 기능
+toggleBtn.addEventListener('click', () => {
+  const showing = reviewDiv.classList.toggle('show');
+  toggleBtn.textContent = showing ? '독후감 숨기기' : '독후감 보기';
+
+  // 독후감 버튼 구성
+  if (showing) {
+    if (currentBook && currentBook.review) {
+      reviewActions.innerHTML = `
+        <button class="review-edit" onclick="editReview()">수정</button>
+        <button class="review-delete" onclick="deleteReview()">삭제</button>
+      `;
+    } else {
+      reviewActions.innerHTML = `
+        <button class="review-edit" onclick="createReview()">작성하기</button>
       `;
     }
+  } else {
+    reviewActions.innerHTML = '';
+  }
+});
 
-    if (!bookId) {
-      detailDiv.textContent = '책 ID가 없습니다.';
+// 독후감 관련 버튼 함수
+function editReview() {
+  if (!currentBook || !currentBook.review) return;
+  window.location.href = `/review-edit.html?id=${currentBook.review.id}`;
+}
+
+function deleteReview() {
+  if (!currentBook || !currentBook.review) return;
+  if (!confirm('정말로 독후감을 삭제하시겠습니까?')) return;
+  fetch(`/api/v1/reviews/${currentBook.review.id}`, { method: 'DELETE' })
+    .then(res => { if (!res.ok) throw new Error('삭제 실패: ' + res.statusText); alert('삭제되었습니다.'); location.reload(); })
+    .catch(err => { alert('삭제 중 오류가 발생했습니다: ' + err.message); });
+}
+
+function createReview() {
+  if (!currentBook) return;
+  window.location.href = `/review-create.html?bookId=${currentBook.id}`;
+}
+
+if (!bookId) {
+  detailDiv.textContent = '책 ID가 없습니다.';
+  editBtn.style.display = 'none';
+  deleteBtn.style.display = 'none';
+} else {
+  fetch(`/api/v1/books/${encodeURIComponent(bookId)}`)
+    .then(res => { if (!res.ok) throw new Error('책을 찾을 수 없습니다.'); return res.json(); })
+    .then(book => {
+      renderBookDetail(book);
+      editBtn.style.display = 'inline-block';
+      deleteBtn.style.display = 'inline-block';
+    })
+    .catch(err => {
+      detailDiv.textContent = '책 상세 정보를 불러올 수 없습니다. ' + err.message;
       editBtn.style.display = 'none';
       deleteBtn.style.display = 'none';
-    } else {
-      fetch(`/api/v1/books/${encodeURIComponent(bookId)}`)
-        .then(res => {
-          if (!res.ok) throw new Error('책을 찾을 수 없습니다.');
-          return res.json();
-        })
-        .then(book => {
-          renderBookDetail(book);
-          editBtn.style.display = 'inline-block';
-          deleteBtn.style.display = 'inline-block';
-        })
-        .catch(err => {
-          detailDiv.textContent = '책 상세 정보를 불러올 수 없습니다. ' + err.message;
-          editBtn.style.display = 'none';
-          deleteBtn.style.display = 'none';
-        });
-    }
-
-    backBtn.addEventListener('click', () => {
-      window.location.href = '/index.html';  // 목록 페이지로 이동
     });
+}
 
-    editBtn.addEventListener('click', () => {
-      console.log('수정 버튼 클릭됨');
-      if (bookId) {
-        window.location.href = `/book-edit.html?id=${encodeURIComponent(bookId)}`;
-      }
-    });
+backBtn.addEventListener('click', () => { window.location.href = '/index.html'; });
+editBtn.addEventListener('click', () => { if (bookId) window.location.href = `/book-edit.html?id=${encodeURIComponent(bookId)}`; });
+deleteBtn.addEventListener('click', () => {
+  if (!bookId) return;
+  if (!confirm('정말로 이 책을 삭제하시겠습니까?')) return;
+  fetch(`/api/v1/books/${encodeURIComponent(bookId)}`, { method: 'DELETE' })
+    .then(res => { if (!res.ok) throw new Error('삭제 실패: ' + res.statusText); alert('삭제되었습니다.'); window.location.href = '/index.html'; })
+    .catch(err => { alert('삭제 중 오류가 발생했습니다: ' + err.message); });
+});
+</script>
 
-    deleteBtn.addEventListener('click', () => {
-      if (!bookId) return;
-
-      if (!confirm('정말로 이 책을 삭제하시겠습니까?')) return;
-
-      fetch(`/api/v1/books/${encodeURIComponent(bookId)}`, {
-        method: 'DELETE',
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('삭제 실패: ' + res.statusText);
-          alert('삭제되었습니다.');
-          window.location.href = '/index.html';
-        })
-        .catch(err => {
-          alert('삭제 중 오류가 발생했습니다: ' + err.message);
-        });
-    });
-  </script>
 </body>
 </html>

@@ -10,7 +10,9 @@ import com.example.library_project.repository.BookDetailReviewRepository;
 import com.example.library_project.repository.BookRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -27,8 +29,8 @@ public class BookDetailReviewServiceImpl implements BookDetailReviewService{
         BookDetailReview review = dtoToEntity(bookDetailReviewDto);
 
         // 연관관계 매핑을 위한 조회
-        Book book = bookRepository.findById(bookDetailReviewDto.getBook().getId())
-                                    .orElseThrow(() -> new RuntimeException("해당하는 " + bookDetailReviewDto.getBook().getId() + "의 책이 없습니다."));
+        Book book = bookRepository.findById(bookDetailReviewDto.getParantBookId())
+                                    .orElseThrow(() -> new IllegalArgumentException("해당하는 " + bookDetailReviewDto.getParantBookId() + "의 책이 없습니다."));
 
         // 연관관계 매핑!(Book.java에 있는 연관관계 메소드)
         review.setBook(book); 
@@ -43,20 +45,29 @@ public class BookDetailReviewServiceImpl implements BookDetailReviewService{
 
         return entityToDto(bookDetailReview);
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void modifyBookDetailReview(BookDetailReviewDto bookDetailReviewDto) {
+        Long id = bookDetailReviewDto.getId();
+
+        BookDetailReview bookDetailReview = bookDetailReviewRepository.findById(id)
+                                                .orElseThrow(() -> new IllegalArgumentException("해당하는 "+ id +"의 독후감이 없습니다."));
+
+        bookDetailReview.setContent(bookDetailReviewDto.getContent());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteBookDetailReview(Long id) {
+        bookDetailReviewRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당하는 "+ id +"의 독후감이 없습니다."));
+
+        bookDetailReviewRepository.deleteById(id);        
+    }
+
     
     
-
-    // 수정
-    // Long id = bookDetailReviewDto.getId();
-
-    //     BookDetailReview bookDetailReview = bookDetailReviewRepository.findById(id)
-    //                                             .orElseThrow(() -> new RuntimeException("해당하는 "+ id +"의 독후감이 없습니다."));
-
-    //     bookDetailReview.setContent(bookDetailReviewDto.getContent());
-        
-    //     return bookDetailReviewRepository.save(dtoToEntity(bookDetailReviewDto)).getId();
-    
-
     
 
 }

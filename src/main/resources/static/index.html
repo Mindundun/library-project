@@ -65,12 +65,12 @@
   <table id="book-table">
     <thead>
       <tr>
-        <th style="width: 1cm;">번호</th>
-        <th style="width: 30%;">이름</th>
+        <th style="width: 1cm; text-align: center;">번호</th>
+        <th style="width: 20%;">이름</th>
         <th>저자</th>
         <th style="width: 40%;">설명</th>
         <th>출판사</th>
-        <th style="width: 2.5cm;">발행일</th>
+        <th style="width: 2.2cm;">발행일</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -110,7 +110,7 @@
               const tr = document.createElement('tr');
 
               tr.innerHTML = `
-                <td>${(currentPage - 1) * size + index + 1}</td>
+                <td style="text-align: center;">${(currentPage - 1) * size + index + 1}</td>
                 <td><a href="/book-detail.html?id=${book.id}">${book.name}</a></td>
                 <td>${book.author}</td>
                 <td>${book.description}</td>

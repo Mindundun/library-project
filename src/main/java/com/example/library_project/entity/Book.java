@@ -51,6 +51,7 @@ public class Book {
     // 일단 1:1이라 봄 
     @OneToOne(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private BookDetailReview review;
+    
   
     // 연관 관계 메소드
     public void setReview(BookDetailReview review){

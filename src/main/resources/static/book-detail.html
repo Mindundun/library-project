@@ -118,8 +118,8 @@
   #delete-button:hover { background-color: #c0392b; }
   #toggle-review { background-color: #2ecc71; }
   #toggle-review:hover { background-color: #27ae60; }
-  .review-edit { background-color: #f39c12; }
-  .review-edit:hover { background-color: #e67e22; }
+  .review-edit { background-color: #3498db; }
+  .review-edit:hover { background-color: #2980b9; }
   .review-delete { background-color: #e74c3c; }
   .review-delete:hover { background-color: #c0392b; }
 
@@ -173,7 +173,7 @@ let currentBook = null;
 function renderBookDetail(book) {
   currentBook = book;
   detailDiv.innerHTML = `
-    <p><strong>ID:</strong> <span>${book.id}</span></p>
+    <p style="display: none;"><strong>ID:</strong> <span>${book.id}</span></p>
     <p><strong>이름:</strong> <span>${book.name}</span></p>
     <p><strong>저자:</strong> <span>${book.author}</span></p>
     <p><strong>설명:</strong> <span>${book.description || ''}</span></p>
@@ -185,7 +185,7 @@ function renderBookDetail(book) {
   if (book.review) {
     reviewContent.innerHTML = `
       <h2>독후감</h2>
-      <p><strong>ID:</strong> <span>${book.review.id}</span></p>
+      <p style="display: none;"><strong>ID:</strong> <span>${book.review.id}</span></p>
       <p><strong>내용:</strong> <span>${book.review.content}</span></p>
       <p><strong>등록일:</strong> <span>${formatDate(book.review.regDate)}</span></p>
     `;

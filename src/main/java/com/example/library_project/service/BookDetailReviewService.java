@@ -14,12 +14,18 @@ public interface BookDetailReviewService {
     // 책 리뷰 상세 조회
     public BookDetailReviewDto getBookDetailReview(Long id);
 
+    // 책 리뷰 수정
+    public void modifyBookDetailReview(BookDetailReviewDto bookDetailReviewDto);
+
+    // 책 리뷰 삭제
+    public void deleteBookDetailReview(Long id);
+
     // Entity to DTO
     default BookDetailReviewDto entityToDto(BookDetailReview bookDetailReview) {
         return BookDetailReviewDto.builder()
                                     .id(bookDetailReview.getId())
                                     .content(bookDetailReview.getContent())
-                                    .book(bookDetailReview.getBook())
+                                    .parantBookId(bookDetailReview.getBook().getId())
                                     .regDate(bookDetailReview.getRegDate())
                                     .build();
     }
